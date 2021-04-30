@@ -3,8 +3,5 @@
 steps:
 - name: "rust"
   args: ["cargo", "doc"]
-artifacts:
-  objects:
-    location: "gs://sffc-chromium-ci-test-bucket/pr/$_PR_NUMBER/doc"
-    paths:
-    - target/doc
+- name: "gcr.io/cloud-builders/gsutil"
+  args: ["-m", "cp", "-r", "target/doc", "gs://sffc-chromium-ci-test-bucket/pr/$_PR_NUMBER/$BUILD_ID"]
