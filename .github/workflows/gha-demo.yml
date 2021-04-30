@@ -38,8 +38,8 @@ jobs:
     - name: Upload docs to Google Cloud Storage
       run: |
         gsutil -m cp -r target/doc gs://${{ env.GCP_BUCKET_ID }}/gha/${{ github.run_number }}/docs
-    - name: Print summary
+    - name: "➡️ Summary"
       run: |
-        echo "::group::➡️ Summary"
-        echo "View docs at: http://${{ env.GCP_BUCKET_ID }}.storage.googleapis.com/gha/${{ github.run_number }}/docs/ci_test/index.html"
+        echo "::group::📖 Docs Preview"
+        echo "http://${{ env.GCP_BUCKET_ID }}.storage.googleapis.com/gha/${{ github.run_number }}/docs/ci_test/index.html"
         echo "::endgroup::"
