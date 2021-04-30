@@ -5,3 +5,7 @@ steps:
   args: ["cargo", "doc"]
 - name: "gcr.io/cloud-builders/gsutil"
   args: ["-m", "cp", "-r", "target/doc", "gs://sffc-chromium-ci-test-bucket/pr/$_PR_NUMBER/$BUILD_ID"]
+artifacts:
+  objects:
+    location: "gs://sffc-chromium-ci-test-bucket/pr/$_PR_NUMBER/$BUILD_ID/index.html"
+    paths: ["target/doc/index.html"]
