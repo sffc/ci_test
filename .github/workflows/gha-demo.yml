@@ -17,7 +17,17 @@ jobs:
       - run: echo "🍏 This job's status is ${{ job.status }}."
   Upload-Docs:
     runs-on: ubuntu-latest
+    env:
+      GCP_PROJECT_ID: "sffc-chromium-ci-test"
+      GCP_BUCKET_ID: "sffc-chromium-ci-test-bucket"
+      DOCS_URL: "http://${{ GCP_BUCKET_ID }}.storage.googleapis.com/gha/${{ GITHUB_RUN_ID }}/ci_test/index.html"
     steps:
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/setup-gcloud@master
+      with:
+        project_id: ${{ GCP_PROJECT_ID }}
+        service_account_key: ${{ secrets.GCP_SA_KEY }}
+        export_default_credentials: true
     - uses: actions/checkout@v2
     - name: Load the default Rust toolchain via the rust-toolchain file.
       run: rustup show
@@ -26,13 +36,7 @@ jobs:
       with:
         command: doc
         args: --workspace --release --all-features --no-deps
-    - name: Authenticate on GCS
-      uses: google-github-actions/setup-gcloud@master
-      with:
-        project_id: ${{ secrets.GCP_PROJECT_ID }}
-        service_account_key: ${{ secrets.GCP_SA_KEY }}
-        export_default_credentials: true
-    - name: Use gcloud CLI
-      run: gcloud info
-    - name: Upload to GCS
-      run: gsutil -m cp -r target/doc gs://sffc-chromium-ci-test-bucket/pr/gha
+    - name: "Upload docs to GCS: ${{ DOCS_URL }}"
+      run: gsutil -m cp -r target/doc gs://${{ GCP_BUCKET_ID }}/gha/${{ GITHUB_RUN_ID }}/docs
+    }
+    }
