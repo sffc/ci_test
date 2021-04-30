@@ -20,7 +20,6 @@ jobs:
     env:
       GCP_PROJECT_ID: "sffc-chromium-ci-test"
       GCP_BUCKET_ID: "sffc-chromium-ci-test-bucket"
-      DOCS_URL: "http://sffc-chromium-ci-test-bucket.storage.googleapis.com/gha/${{ github.GITHUB_RUN_ID }}/ci_test/index.html"
     steps:
     - name: Authenticate to Google Cloud
       uses: google-github-actions/setup-gcloud@master
@@ -36,6 +35,7 @@ jobs:
       with:
         command: doc
         args: --workspace --release --all-features --no-deps
-    - name: "Upload docs to GCS: ${{ env.DOCS_URL }}"
+    - name: "➡️ Upload docs to Google Cloud Storage"
       run: |
-        gsutil -m cp -r target/doc gs://${{ env.GCP_BUCKET_ID }}/gha/${{ github.GITHUB_RUN_ID }}/docs
+        echo "View docs at: http://sffc-chromium-ci-test-bucket.storage.googleapis.com/gha/${{ github.GITHUB_RUN_ID }}/ci_test/index.html"
+        gsutil -m cp -r target/doc gs://${{ env.GCP_BUCKET_ID }}/gha/${{ env.GITHUB_RUN_ID }}/docs
