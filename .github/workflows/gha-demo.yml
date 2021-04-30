@@ -21,21 +21,25 @@ jobs:
       GCP_PROJECT_ID: "sffc-chromium-ci-test"
       GCP_BUCKET_ID: "sffc-chromium-ci-test-bucket"
     steps:
+    - uses: actions/checkout@v2
+    - name: Load the default Rust toolchain via the rust-toolchain file.
+      run: rustup show
     - name: Authenticate to Google Cloud
       uses: google-github-actions/setup-gcloud@master
       with:
         project_id: ${{ env.GCP_PROJECT_ID }}
         service_account_key: ${{ secrets.GCP_SA_KEY }}
         export_default_credentials: true
-    - uses: actions/checkout@v2
-    - name: Load the default Rust toolchain via the rust-toolchain file.
-      run: rustup show
     - name: Build docs
       uses: actions-rs/cargo@v1
       with:
         command: doc
         args: --workspace --release --all-features --no-deps
-    - name: "➡️ Upload docs to Google Cloud Storage"
+    - name: Upload docs to Google Cloud Storage
       run: |
-        echo "View docs at: http://${{ env.GCP_BUCKET_ID }}.storage.googleapis.com/gha/${{ github.run_number }}/docs/ci_test/index.html"
         gsutil -m cp -r target/doc gs://${{ env.GCP_BUCKET_ID }}/gha/${{ github.run_number }}/docs
+    - name: Print summary
+      run: |
+        echo "::group::➡️ Summary"
+        echo "View docs at: http://${{ env.GCP_BUCKET_ID }}.storage.googleapis.com/gha/${{ github.run_number }}/docs/ci_test/index.html"
+        echo "::endgroup::"
