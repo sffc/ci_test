@@ -37,5 +37,5 @@ jobs:
         args: --workspace --release --all-features --no-deps
     - name: "➡️ Upload docs to Google Cloud Storage"
       run: |
-        echo "View docs at: http://sffc-chromium-ci-test-bucket.storage.googleapis.com/gha/${{ github.GITHUB_RUN_ID }}/ci_test/index.html"
-        gsutil -m cp -r target/doc gs://${{ env.GCP_BUCKET_ID }}/gha/${{ env.GITHUB_RUN_ID }}/docs
+        echo "View docs at: http://${{ env.GCP_BUCKET_ID }}.storage.googleapis.com/gha/${{ github.run_id }}/ci_test/index.html"
+        gsutil -m cp -r target/doc gs://${{ env.GCP_BUCKET_ID }}/gha/${{ github.run_id }}/docs
