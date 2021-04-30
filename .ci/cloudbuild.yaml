@@ -8,4 +8,4 @@ steps:
 artifacts:
   objects:
     location: "gs://sffc-chromium-ci-test-bucket/pr/$_PR_NUMBER/$BUILD_ID/index.html"
-    paths: ["target/doc/index.html"]
+    paths: ["target/doc/ci_test/index.html"]
