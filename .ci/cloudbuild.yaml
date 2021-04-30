@@ -1,0 +1,7 @@
+# Configuration file for Google Cloud Build CI
+
+steps:
+- name: "ubuntu"
+  args: ["echo", "hello world"]
+- name: "ubuntu"
+  args: ["ls", "-a"]
