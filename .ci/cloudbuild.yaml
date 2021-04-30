@@ -1,7 +1,10 @@
 # Configuration file for Google Cloud Build CI
 
 steps:
-- name: "ubuntu"
-  args: ["echo", "hello world"]
-- name: "ubuntu"
-  args: ["ls", "-a"]
+- name: "rust"
+  args: ["cargo", "doc"]
+artifacts:
+  objects:
+    location: "gs://sffc-chromium-ci-test-bucket/pr/$_PR_NUMBER/doc"
+    paths:
+    - target/doc
