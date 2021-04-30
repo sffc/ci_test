@@ -1,11 +1,15 @@
 # Configuration file for Google Cloud Build CI
 
 steps:
+# Build the docs using the dockerhub rust container
 - name: "rust"
   args: ["cargo", "doc"]
+# Recursively upload the docs to GCS
 - name: "gcr.io/cloud-builders/gsutil"
-  args: ["-m", "cp", "-r", "target/doc", "gs://sffc-chromium-ci-test-bucket/pr/$_PR_NUMBER/$BUILD_ID"]
-artifacts:
-  objects:
-    location: "gs://sffc-chromium-ci-test-bucket/pr/$_PR_NUMBER/$BUILD_ID/index.html"
-    paths: ["target/doc/ci_test/index.html"]
+  args: ["-m", "cp", "-r", "target/doc", "gs://sffc-chromium-ci-test-bucket/pr/$_PR_NUMBER/$SHORT_SHA"]
+
+# Note: Uploading the HTML as an artifact can add metadata to the build, but this metadata does not surface in GitHub where it would be useful.
+# artifacts:
+#   objects:
+#     location: "gs://sffc-chromium-ci-test-bucket/pr/$_PR_NUMBER/$SHORT_SHA/index.html"
+#     paths: ["target/doc/ci_test/index.html"]
