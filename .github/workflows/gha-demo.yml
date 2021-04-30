@@ -37,6 +37,5 @@ jobs:
         command: doc
         args: --workspace --release --all-features --no-deps
     - name: "Upload docs to GCS: ${{ DOCS_URL }}"
-      run: gsutil -m cp -r target/doc gs://${{ GCP_BUCKET_ID }}/gha/${{ GITHUB_RUN_ID }}/docs
-    }
-    }
+      run: |
+        gsutil -m cp -r target/doc gs://${{ GCP_BUCKET_ID }}/gha/${{ GITHUB_RUN_ID }}/docs
